@@ -7,17 +7,12 @@ function Attention-Window {
 	$MessageIcon = [System.Windows.MessageBoxImage]::Warning
 	$ButtonType = [System.Windows.MessageBoxButton]::Ok
 	$MessageboxTitle = "INSTRUCTIONS ON HOW TO CONNECT TO THE VPN"
-	$Messageboxbody = "Please follow the instructions below on how to connect to vpn: `n
-	1. If the address field is empty when Cisco VPN app opens up, enter vpn.utexas.edu`n
-	2. Your username is your UT EID `n
-	3. Your password is the same as your EID password `n
-	4. Second password option is used with DUO app.`n
-	IF YOU READ AND UNDERSTOOD INSTRUCTIONS, CLICK OK BELOW"
+	$Messageboxbody = "<you can put custom instructions for the user to connect to vpn>"
 	[System.Windows.MessageBox]::Show($Messageboxbody,$MessageboxTitle,$ButtonType,$Messageicon)
 }
 
 function Vpn-Process {
-		Start-Process "C:\Program Files (x86)\Cisco\Cisco AnyConnect Secure Mobility Client\vpnui.exe" -Wait
+		Start-Process "vpn client" -Wait
 
 		$id = Get-Process -Name "vpnui" | Select-Object -ExpandProperty Id -First 1
 
@@ -31,11 +26,11 @@ function Vpn-Process {
 }
 
 function Activate-Windows {
-	Start-Process cmd  "/c `"cscript C:\windows\system32\slmgr.vbs -ato & pause `"" -NoNewWindow
+	Start-Process cmd  "/c `"vbs script for activation & pause `"" -NoNewWindow
 }
 
 function Test-vpnConnection {
-	$test = Test-NetConnection kms.austin.utexas.edu -Port 1688 -InformationLevel "Detailed"
+	$test = Test-NetConnection <kms server address> -Port <port> -InformationLevel "Detailed"
 	$status = $test.TcpTestSucceeded
 	return ($status)
 }
@@ -61,9 +56,6 @@ function Proceed-VPN {
 
 # Displays user instruction on how to connect to VPN
 #put the function in the script block so it can be executed asynchronously
-
-# async execution of attention window
-#Start-Job -ScriptBlock $attention_window_scriptblock
 
 Proceed-VPN
 
