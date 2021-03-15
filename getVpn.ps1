@@ -49,11 +49,10 @@ function Proceed-VPN {
 	Attention-Window
 	Vpn-Process
 	
-	$flag = Test-vpnConnection
-	do {
-		Write-Host "TRYING TO CONNECT TO KMS SERVER..."
+	$flag = 0
+	while (!($flag)) {
 		$flag = Test-vpnConnection
-	}while(!($flag))
+	}
 	Write-Host "Connection to kms has been established, activating windows now!"
 	Activate-Windows
 
